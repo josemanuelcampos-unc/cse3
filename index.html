@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="mapbox/mapbox-gl.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="./mapbox/measure.css">
+        <style>
+        #map {
+            width: 836px;
+            height: 672px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+            <nav id="menu"></nav>
+              <div id="distance" class="distance-container"></div>
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="./mapbox/mapbox-gl.js"></script>
+        <script src="data/8Convocatoria2020mapadecalor_0.js"></script>
+        <script src="data/8Convocatoria2020_1.js"></script>
+        <script src="data/7Convocatoria2020mapadecalor_2.js"></script>
+        <script src="data/7Convocatoria2020_3.js"></script>
+        <script src="data/6Convocatoria2019mapadecalor_4.js"></script>
+        <script src="data/6Convocatoria2019_5.js"></script>
+        <script src="data/5Convocatoria2019mapadecalor_6.js"></script>
+        <script src="data/5Convocatoria2019_7.js"></script>
+        <script src="data/4Convocatoria2018mapadecalor_8.js"></script>
+        <script src="data/4Convocatoria2018_9.js"></script>
+        <script src="data/3Convocatoria2018mapadecalor_10.js"></script>
+        <script src="data/3Convocatoria2018_11.js"></script>
+        <script src="data/2Convocatoria2018mapadecalor_12.js"></script>
+        <script src="data/2Convocatoria2018_13.js"></script>
+        <script src="data/1Convocatoria2018mapadecalor_14.js"></script>
+        <script src="data/1Convocatoria2018_15.js"></script>
+        <script src="data/AsociacionCivil_16.js"></script>
+        <script src="data/Fundacion_17.js"></script>
+        <script src="data/Comercio_18.js"></script>
+        <script src="data/OrganismosPublicos_19.js"></script>
+<script src="./mapbox/style.js"></script>
+<script src="./js/Autolinker.min.js"></script>
+<script>
+var map = new mapboxgl.Map({
+ container: 'map',
+ style: styleJSON,
+ center: [-64.05732538744927,-31.47975789153322],
+ zoom: 10,
+ bearing: 360.0,
+ attributionControl: false
+});
+map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+map.addControl(new mapboxgl.AttributionControl({
+    customAttribution: '<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://github.com/mapbox/mapbox-gl-js" target="_blank">Mapbox GL JS</a> &middot; <a href="https://qgis.org" target="_blank">QGIS</a>',
+    compact: false
+}));
+var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+    var toggleableLayerIds = ['lyr_OpenStreetMap_20_0', 'OpenStreetMap','lyr_OrganismosPublicos_19_0', 'Organismos Publicos','lyr_Comercio_18_0', 'Comercio','lyr_Fundacion_17_0', 'Fundacion','lyr_AsociacionCivil_16_0', 'Asociacion Civil','lyr_1Convocatoria2018_15_0', '1° Convocatoria 2018','lyr_1Convocatoria2018mapadecalor_14_0', '1° Convocatoria 2018 mapa de calor','lyr_2Convocatoria2018_13_0', '2° Convocatoria 2018','lyr_2Convocatoria2018mapadecalor_12_0', '2° Convocatoria 2018 mapa de calor','lyr_3Convocatoria2018_11_0', '3° Convocatoria 2018','lyr_3Convocatoria2018mapadecalor_10_0', '3° Convocatoria 2018 mapa de calor','lyr_4Convocatoria2018_9_0', '4° Convocatoria 2018','lyr_4Convocatoria2018mapadecalor_8_0', '4° Convocatoria 2018 mapa de calor','lyr_5Convocatoria2019_7_0', '5° Convocatoria 2019','lyr_5Convocatoria2019mapadecalor_6_0', '5° Convocatoria 2019 mapa de calor','lyr_6Convocatoria2019_5_0', '6° Convocatoria 2019 ','lyr_6Convocatoria2019mapadecalor_4_0', '6° Convocatoria 2019  mapa de calor','lyr_7Convocatoria2020_3_0', '7° Convocatoria 2020','lyr_7Convocatoria2020mapadecalor_2_0', '7° Convocatoria 2020 mapa de calor','lyr_8Convocatoria2020_1_0', '8° Convocatoria 2020','lyr_8Convocatoria2020mapadecalor_0_0', '8° Convocatoria 2020 mapa de calor'];
+
+    for (var i = 0; i < toggleableLayerIds.length; i=i+2) {
+        var id = toggleableLayerIds[i];
+        var layerName = toggleableLayerIds[i+1]
+
+        var link = document.createElement('a');
+        link.href = '#';
+        link.className = 'active';
+        link.layer = id;
+        link.textContent = layerName;
+
+        link.onclick = function (e) {
+            var clickedLayer = this.layer;
+            e.preventDefault();
+            e.stopPropagation();
+
+            var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+            if (typeof visibility === 'undefined' || visibility == 'visible') {
+                map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                this.className = '';
+            } else {
+                this.className = 'active';
+                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+            }
+        };
+
+        var layers = document.getElementById('menu');
+        layers.appendChild(link);
+    }</script>
+        <script src="./mapbox/measureMetric.js"></script>
+        <script src="./mapbox/turf.min.js"></script>
+        <script>
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true
+            })
+        );
+        </script>
+    </body>
+</html>
